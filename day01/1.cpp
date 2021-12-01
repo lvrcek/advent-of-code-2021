@@ -1,3 +1,5 @@
+// Copyright [2021] Lovro Vrcek
+
 #include <bits/stdc++.h>
 
 using namespace std;

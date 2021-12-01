@@ -1,3 +1,5 @@
+// Copyright [2021] Lovro Vrcek
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -7,7 +9,7 @@ int main() {
     int total = 0;
     string line;
     vector<int> values;
-    
+
     while (getline(cin, line)) {
         if (line.size() == 0)
             break;
