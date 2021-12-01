@@ -1,4 +1,4 @@
-// Copyright [2021] Lovro Vrcek
+// Copyright (c) 2021 Lovro Vrcek
 
 #include <bits/stdc++.h>
 
