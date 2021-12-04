@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 #include <fstream>
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::string;
 
 std::vector<int> split(string s, string del=" ") {
     int start = 0;
