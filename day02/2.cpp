@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Lovro Vrcek
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -11,11 +13,9 @@ int main() {
         if (command == "forward") {
             forward += val;
             depth += aim * val;
-        }
-        else if (command == "down") {
+        } else if (command == "down") {
             aim += val;
-        }
-        else {
+        } else {
             aim -= val;
         }
     }

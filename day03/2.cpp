@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Lovro Vrcek
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -5,74 +7,58 @@ using namespace std;
 
 int main() {
     string line;
+    ifstream iss("in.txt");
     string gamma = "", epsilon = "";
-    vector<string> inputs, vv1, vv2;
-    
-    while (cin >> line) {
+    vector<string> inputs, gam_vec, eps_vec, t1, t2;
+    const int bitlen = 12;
+
+    while (iss >> line) {
         inputs.push_back(line);
     }
-    size_t length = line.size();
 
-    vv1 = vv2 = inputs;
-    int yy, ll;
-    vector<int> v1(length, 0), v2(length, 0);
-
+    gam_vec = eps_vec = inputs;
+    int ones, zeros;
     char flag;
 
-    for (int i = 0; i < length; i++) {
-        if (vv1.size() == 1) {
+    for (int i = 0; i < bitlen; ++i) {
+        if (gam_vec.size() == 1)
             break;
-        }
-
-        yy = 0;
-        ll = 0;
-        for (int j = 0; j < vv1.size(); j++) {
-            if (vv1[j][i] == '1')
-                yy++;
+        ones = zeros = 0;
+        for (int j = 0; j < gam_vec.size(); ++j) {
+            if (gam_vec[j][i] == '1')
+                ++ones;
             else
-                ll++;
+                ++zeros;
         }
-        if (yy >= ll)
-            flag = '1';
-        else
-            flag = '0';
-        
-        vector<string> t1;
-        for (int j = 0; j < vv1.size(); j++) {
-            if (vv1[j][i] == flag) {
-                t1.push_back(vv1[j]);
-            }
+        flag = ones >= zeros ? '1' : '0';
+        t1.clear();
+        for (int j = 0; j < gam_vec.size(); ++j) {
+            if (gam_vec[j][i] == flag)
+                t1.push_back(gam_vec[j]);
         }
-        vv1 = t1;
+        gam_vec = t1;
     }
 
-    for (int i = 0; i < length; i++) {
-        if (vv2.size() == 1) {
+    for (int i = 0; i < bitlen; ++i) {
+        if (eps_vec.size() == 1)
             break;
-        }
-
-        yy = 0;
-        ll = 0;
-        for (int j = 0; j < vv2.size(); j++) {
-            if (vv2[j][i] == '1')
-                yy++;
+        ones = zeros = 0;
+        for (int j = 0; j < eps_vec.size(); ++j) {
+            if (eps_vec[j][i] == '1')
+                ++ones;
             else
-                ll++;
+                ++zeros;
         }
-        if (yy < ll)
-            flag = '1';
-        else
-            flag = '0';
-        
-        vector<string> t2;
-        for (int j = 0; j < vv2.size(); j++) {
-            if (vv2[j][i] == flag) {
-                t2.push_back(vv2[j]);
-            }
+        flag = ones < zeros ? '1' : '0';
+        t2.clear();
+        for (int j = 0; j < eps_vec.size(); j++) {
+            if (eps_vec[j][i] == flag)
+                t2.push_back(eps_vec[j]);
         }
-        vv2 = t2;
+        eps_vec = t2;
     }
 
-    std::cout << bitset<12>(vv1[0]).to_ulong() * bitset<12>(vv2[0]).to_ulong() << endl;
+    cout << bitset<bitlen>(gam_vec[0]).to_ulong() * bitset<bitlen>(eps_vec[0]).to_ulong()
+         << endl;
     return 0;
 }

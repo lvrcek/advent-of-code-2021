@@ -1,6 +1,8 @@
+// Copyright (c) 2021 Lovro Vrcek
+
 #include <bits/stdc++.h>
 
-std::vector<uint64_t> split(std::string s, std::string del=" ") {
+std::vector<uint64_t> split(std::string s, std::string del = " ") {
     std::vector<uint64_t> v;
     int start = 0;
     int end = s.find(del);
@@ -11,27 +13,29 @@ std::vector<uint64_t> split(std::string s, std::string del=" ") {
     }
     v.push_back((uint64_t)atoi(s.substr(start, end-start).c_str()));
     return v;
-}  
+}
 
-int main () {
+int main() {
     std::ifstream iss("in.txt");
     std::string line;
-    std::vector<uint64_t> histogram(9,0);
+    std::vector<uint64_t> histogram(9, 0);
+    int days = 256;
+
     while (getline(iss, line)) {
-        for (auto& n: split(line, ",")) {
-            histogram[n]++;
+        for (auto& n : split(line, ",")) {
+            ++histogram[n];
         }
     }
-    int days = 256;
-    for (int i = 0; i < days; i++) {
+
+    for (int i = 0; i < days; ++i) {
         std::vector<uint64_t> tmp(histogram.begin() + 1, histogram.end());
         tmp[6] += histogram[0];
         tmp.push_back(histogram[0]);
         histogram = tmp;
     }
 
-    uint64_t sum=0;
-    std::cout << std::accumulate(histogram.begin(), histogram.end(), sum) << std::endl;
-
+    std::cout << std::accumulate(histogram.begin(), histogram.end(),
+                                 decltype(histogram)::value_type(0))
+              << std::endl;
     return 0;
 }

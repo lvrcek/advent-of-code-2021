@@ -1,27 +1,43 @@
+// Copyright (c) 2021 Lovro Vrcek
+
 #include <bits/stdc++.h>
 
 
-std::pair<std::string, std::string> split(std::string line, std::string del) {
-    // std::string del = " -> ";
-    int end_1 = line.find(del);
-    int begin_2 = end_1 + del.size();
-    std::string first = line.substr(0, end_1);
-    std::string second = line.substr(begin_2, line.size()-begin_2);
-    // std::cout << first << " " << second;
-    std::pair<std::string, std::string> p = std::make_pair(first, second);
-    return p;
+std::vector<std::string> split(std::string s, std::string del) {
+    int start = 0;
+    int end = s.find(del);
+    std::vector<std::string> v;
+    while (end != -1) {
+        v.push_back(s.substr(start, end - start));
+        start = end + del.size();
+        end = s.find(del, start);
+    }
+    v.push_back(s.substr(start, end-start));
+    return v;
 }
 
 void print_vector(std::vector<int> v) {
-    for (auto& n: v) 
+    for (auto& n : v)
         std::cout << n << " ";
     std::cout << std::endl;
 }
 
-void print_table(std::vector<std::vector<int>> table) {
-    for (auto& v: table) 
+void print_grid(std::vector<std::vector<int>> grid) {
+    for (auto& v : grid)
         print_vector(v);
     std::cout << std::endl;
+}
+
+int count_elements(std::vector<std::vector<int>> grid) {
+    int count = 0;
+    for (auto& line : grid) {
+        for (auto& n : line) {
+            if (n > 1) {
+                ++count;
+            }
+        }
+    }
+    return count;
 }
 
 int main() {
@@ -29,31 +45,30 @@ int main() {
     std::ifstream iss("in.txt");
     std::vector<std::vector<int>> grid;
     int limit = 1000;
-    for (int i = 0; i < limit; i++) {
+
+    for (int i = 0; i < limit; ++i) {
         std::vector<int> tmp;
-        for (int j = 0; j < limit; j++) {
+        for (int j = 0; j < limit; ++j) {
             tmp.push_back(0);
         }
         grid.push_back(tmp);
     }
+
     while (getline(iss, line)) {
-        std::pair<std::string, std::string> p = split(line, " -> ");
-        std::pair<std::string, std::string> left, right;
-        left = split(p.first, ",");
-        right = split(p.second, ",");
-        int a_x = atoi(left.first.c_str());
-        int a_y = atoi(left.second.c_str());
-        int b_x = atoi(right.first.c_str());
-        int b_y = atoi(right.second.c_str());
-        // std::cout << a_x << " " << a_y << " " << b_x << " " << b_y << std::endl;
+        int a_x, a_y, b_x, b_y;
+        std::vector<std::string> v = split(line, " -> ");
+        std::vector<std::string> left = split(v[0], ",");
+        std::vector<std::string> right = split(v[1], ",");
+        a_x = atoi(left[0].c_str()); a_y = atoi(left[1].c_str());
+        b_x = atoi(right[0].c_str()); b_y = atoi(right[1].c_str());
+
         if (a_x == b_x) {
            int start = a_y < b_y ? a_y : b_y;
            int end = a_y > b_y ? a_y : b_y;
            for (int i = start; i <= end; i++) {
                grid[i][a_x] += 1;
            }
-        }
-        else if (a_y == b_y) {
+        } else if (a_y == b_y) {
            int start = a_x < b_x ? a_x : b_x;
            int end = a_x > b_x ? a_x : b_x;
            for (int i = start; i <= end; i++) {
@@ -62,17 +77,6 @@ int main() {
         }
     }
 
-    // print_table(grid);
-    
-    int sum = 0;
-    for (auto& line: grid) {
-        for (auto& n: line) {
-            if (n > 1) {
-                sum++;
-            }
-        }
-    }
-    std::cout << sum << std::endl;
-
+    std::cout << count_elements(grid) << std::endl;
     return 0;
 }

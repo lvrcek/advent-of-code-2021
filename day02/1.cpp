@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Lovro Vrcek
+
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -10,11 +12,9 @@ int main() {
     while (cin >> command >> val) {
         if (command == "forward") {
             forward += val;
-        }
-        else if (command == "down") {
+        } else if (command == "down") {
             depth += val;
-        }
-        else {
+        } else {
             depth -= val;
         }
     }

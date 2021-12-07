@@ -1,11 +1,13 @@
+// Copyright (c) 2021 Lovro Vrcek
+
 #include <bits/stdc++.h>
-#include <fstream>
 
 using std::cout;
 using std::endl;
 using std::string;
 
-std::vector<int> split(string s, string del=" ") {
+
+std::vector<int> split(string s, string del = " ") {
     int start = 0;
     int end = s.find(del);
     std::vector<int> v;
@@ -20,52 +22,54 @@ std::vector<int> split(string s, string del=" ") {
 }
 
 void print_vector(std::vector<int> v) {
-    for (auto& n: v) 
+    for (auto& n : v)
         cout << n << " ";
     cout << endl;
 }
 
-void print_table(std::vector<std::vector<int>> table) {
-    for (auto& v: table) 
+void print_grid(std::vector<std::vector<int>> grid) {
+    for (auto& v : grid)
         print_vector(v);
     cout << endl;
 }
 
-void print_grid(std::vector<std::vector<std::vector<int>>> grid) {
-    for (auto& t: grid)
-        print_table(t);
+void print_bingo(std::vector<std::vector<std::vector<int>>> bingo) {
+    for (auto& t : bingo)
+        print_grid(t);
     cout << endl;
 }
 
-bool check_table1(std::vector<std::vector<int>> table) {
+bool check_grid_row(std::vector<std::vector<int>> grid) {
     bool flag = false;
-    for (auto& line: table) {
+    for (auto& line : grid) {
         flag = true;
-        for (auto& n: line) {
+        for (auto& n : line) {
             if (n != -1)
                 flag = false;
         }
-        if (flag) return true;
+        if (flag)
+            return true;
     }
     return false;
 }
 
-bool check_table2(std::vector<std::vector<int>> table) {
-    for (int i = 0; i < table[0].size(); i++) {
+bool check_grid_col(std::vector<std::vector<int>> grid) {
+    for (int i = 0; i < grid[0].size(); ++i) {
         bool flag = true;
-        for (int j = 0; j < table.size(); j++) {
-            if (table[j][i] != -1)
+        for (int j = 0; j < grid.size(); ++j) {
+            if (grid[j][i] != -1)
                 flag = false;
         }
-        if (flag) return true;
+        if (flag)
+            return true;
     }
     return false;
 }
 
-int sum_table(std::vector<std::vector<int>> table) {
+int sum_grid(std::vector<std::vector<int>> grid) {
     int sum = 0;
-    for (auto& line: table) {
-        for (auto& n: line) {
+    for (auto& line : grid) {
+        for (auto& n : line) {
             if (n != -1)
                 sum += n;
         }
@@ -76,52 +80,53 @@ int sum_table(std::vector<std::vector<int>> table) {
 int main() {
     std::string line;
     std::ifstream infile("in.txt");
-    std::getline(infile, line);
+    std::vector<std::vector<std::vector<int>>> bingo;
+    std::vector<std::vector<int>> grid;
 
+    std::getline(infile, line);
     std::vector<int> numbers = split(line, ",");
-
     std::getline(infile, line);
-    std::vector<std::vector<std::vector<int>>> grids;
-    std::vector<std::vector<int>> table;
+
     while (std::getline(infile, line)) {
         if (line.size() <= 1) {
-            grids.push_back(table);
-            table.clear();
+            bingo.push_back(grid);
+            grid.clear();
             continue;
         }
         std::istringstream iss(line);
-        int a,b,c,d,e;
+        int a, b, c, d, e;
         iss >> a >> b >> c >> d >> e;
         std::vector<int> v = {a, b, c, d, e};
-        table.push_back(v);
-        
-
+        grid.push_back(v);
     }
-    grids.push_back(table);
-    print_grid(grids);
-    cout << grids.size() << " " << grids[0].size() << endl;
+    bingo.push_back(grid);
+
+    // print_bingo(bingo);
+    // cout << bingo.size() << " " << bingo[0].size() << endl;
 
     std::vector<std::vector<int>> best;
     bool flag = false;
     int last;
-    for (auto& n: numbers) {
-        if (flag) break;
-        for (auto& table: grids) {
-            for (auto& line: table) {
+    for (auto& n : numbers) {
+        if (flag)
+            break;
+        for (auto& grid : bingo) {
+            for (auto& line : grid) {
                 for (int i = 0; i < line.size(); i++) {
                     if (line[i] == n)
                         line[i] = -1;
                 }
             }
-            if (check_table1(table) || check_table2(table)) {
-                best = table;
+            if (check_grid_row(grid) || check_grid_col(grid)) {
+                best = grid;
                 last = n;
                 flag = true;
                 break;
             }
         }
     }
-    int sum = sum_table(best);
+
+    int sum = sum_grid(best);
     cout << sum << " " << last << " " << sum * last << endl;
     return 0;
 }
